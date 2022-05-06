@@ -8,8 +8,11 @@ import (
 )
 
 func main() {
+	// load template
+	if err := api.LoadTemplate(); err != nil {
+		log.Fatal("load template error.")
+	}
 	http.HandleFunc("/", api.Index)
-
 	if err := http.ListenAndServe(":3030", nil); err != nil {
 		log.Println("http server error.")
 	}
