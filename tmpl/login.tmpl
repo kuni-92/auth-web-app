@@ -1,6 +1,20 @@
 {{ block "login" . }}
 {{ template "header" }}
 <h1>Login Page</h1>
-<p>Welcome</p>
+<div>
+    <form action="" method="post">
+        <div>
+            <label for="name">user name</label>
+            <input type="text" name="name" id="name">
+        </div>
+        <div>
+            <label for="password">password</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <div>
+            <input type="submit" value="Login">
+        </div>
+    </form>
+</div>
 {{ template "footer" }}
 {{ end }}
