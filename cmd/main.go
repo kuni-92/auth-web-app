@@ -13,6 +13,8 @@ func main() {
 		log.Fatal("load template error.")
 	}
 	http.HandleFunc("/", api.Index)
+	http.HandleFunc("/login", api.Login)
+
 	if err := http.ListenAndServe(":3030", nil); err != nil {
 		log.Println("http server error.")
 	}
