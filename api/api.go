@@ -14,8 +14,8 @@ func LoadTemplate() error {
 	return err
 }
 
-func renderTemplate(w io.Writer, name string) {
-	if err := Templates.ExecuteTemplate(w, name, nil); err != nil {
+func renderTemplate(w io.Writer, name string, param interface{}) {
+	if err := Templates.ExecuteTemplate(w, name, param); err != nil {
 		log.Printf("template rendering error. page is %s\n", name)
 	}
 }
