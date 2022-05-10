@@ -19,3 +19,8 @@ func renderTemplate(w io.Writer, name string, param interface{}) {
 		log.Printf("template rendering error. page is %s\n", name)
 	}
 }
+
+type User struct {
+	name string
+	password string
+}
