@@ -1,8 +1,10 @@
 package api
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
+	"math/big"
 	"net/http"
 )
 
@@ -25,5 +27,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	u := User { name, password }
 
-	renderTemplate(w, "top", u)
+	n, err  := rand.Int(rand.Reader, big.NewInt(100))
+	if err != nil {
+		return
+	}
+	SessionID[u.name] = n.Int64()
+	fmt.Printf("Session ID is %d\n", n)
+
+	Top(w, r)
 }
