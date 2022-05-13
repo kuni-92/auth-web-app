@@ -10,6 +10,7 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
+		Error(w, r)
 		return
 	}
 
@@ -17,6 +18,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password := r.PostFormValue("password")
 
 	if password == "" || name == "" {
+		Error(w, r)
 		return
 	}
 
@@ -29,6 +31,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	n, err  := rand.Int(rand.Reader, big.NewInt(100))
 	if err != nil {
+		Error(w, r)
 		return
 	}
 	SessionID[u.name] = n.Int64()
