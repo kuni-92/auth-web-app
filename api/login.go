@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"github.com/kunihiro-dev/auth-web-app/model/entity"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -27,14 +28,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("password is %s\n", password)
 	fmt.Printf("hashed password is %s\n", hpass)
 
-	u := User { name, password }
+	u := entity.UserInfo { Name: name, Password: password }
 
 	n, err  := rand.Int(rand.Reader, big.NewInt(100))
 	if err != nil {
 		Error(w, r)
 		return
 	}
-	SessionID[u.name] = n.Int64()
+	SessionID[u.Name] = n.Int64()
 	fmt.Printf("Session ID is %d\n", n)
 
 	Top(w, r)
