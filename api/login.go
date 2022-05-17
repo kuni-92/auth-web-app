@@ -37,12 +37,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	u := entity.UserInfo { Name: name, Password: password }
 
-	n, err  := rand.Int(rand.Reader, big.NewInt(100))
+	n, err  := generateSessionID()
 	if err != nil {
 		Error(w, r)
 		return
 	}
-	SessionID[u.Name] = n.Int64()
+	SessionID[u.Name] = n
 	fmt.Printf("Session ID is %d\n", n)
 
 	Top(w, r)
@@ -59,4 +59,12 @@ func generatePassword(password string, saltLen int) ([32]byte, error) {
 	passbytes := append(salt, []byte(password)...)
 	result = sha256.Sum256(passbytes)
 	return result, nil
+}
+
+func generateSessionID() (int64, error) {
+	n, err  := rand.Int(rand.Reader, big.NewInt(100))
+	if err != nil {
+		return 0, err
+	}
+	return n.Int64(), nil
 }
