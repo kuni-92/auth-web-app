@@ -18,7 +18,7 @@ func main() {
 	loginHandler := http.HandlerFunc(api.Login)
 	topmenuHandler := http.HandlerFunc(api.Top)
 
-	m:= http.NewServeMux()
+	m := http.NewServeMux()
 	m.Handle("/", middleware.Logger(indexHandler))
 	m.Handle("/login", middleware.Logger(loginHandler))
 	m.Handle("/top", middleware.Logger(topmenuHandler))

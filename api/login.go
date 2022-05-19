@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/kunihiro-dev/auth-web-app/model/entity"
+	"github.com/kunihiro-dev/auth-web-app/session"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -35,14 +36,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("password is %s\n", password)
 	fmt.Printf("hashed password is %s\n", hpass)
 
-	u := entity.UserInfo { Name: name, Password: password }
+	u := entity.UserInfo{Name: name, Password: password}
 
-	n, err  := generateSessionID()
+	n, err := generateSessionID()
 	if err != nil {
 		Error(w, r)
 		return
 	}
-	SessionID[u.Name] = n
+	session.SetSession(u.Name, n)
 	fmt.Printf("Session ID is %d\n", n)
 
 	Top(w, r)
@@ -62,7 +63,7 @@ func generatePassword(password string, saltLen int) ([32]byte, error) {
 }
 
 func generateSessionID() (int64, error) {
-	n, err  := rand.Int(rand.Reader, big.NewInt(100))
+	n, err := rand.Int(rand.Reader, big.NewInt(100))
 	if err != nil {
 		return 0, err
 	}
