@@ -1,19 +1,19 @@
 package session
 
 import (
-	"errors"
 	"crypto/rand"
+	"errors"
+	"fmt"
 	"math/big"
-
 )
 
-var session map[string]int64
+var session map[string]string
 
 func init() {
-	session = make(map[string]int64)
+	session = make(map[string]string)
 }
 
-func Add(key string, value int64) error {
+func Add(key string, value string) error {
 	// return an error, if session data exists
 	if _, ok := session[key]; ok {
 		return errors.New("Session data is exists.")
@@ -22,19 +22,22 @@ func Add(key string, value int64) error {
 	return nil
 }
 
-func Take(key string) (int64, error) {
+func Take(key string) (string, error) {
 	// return an error, if session data not exists
 	if v, ok := session[key]; ok {
 		return v, nil
 	}
-	return 0, errors.New("Session data is not exists.")
+	return "", errors.New("Session data is not exists.")
 }
 
 
-func Generate() (int64, error) {
+func Generate() (string, error) {
 	n, err := rand.Int(rand.Reader, big.NewInt(100))
 	if err != nil {
-		return 0, err
+		return "", err
 	}
-	return n.Int64(), nil
+
+	s := fmt.Sprint(n)
+
+	return s, nil
 }
