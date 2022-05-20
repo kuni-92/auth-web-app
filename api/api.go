@@ -7,11 +7,7 @@ import (
 )
 
 var Templates *template.Template
-var SessionID map[string]int64
-
-func init() {
-	SessionID = make(map[string]int64)
-}
+const SESSION_KEY = "authappkey"
 
 func LoadTemplate() error {
 	t, err := template.ParseGlob("tmpl/*.tmpl")

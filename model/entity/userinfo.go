@@ -1,6 +1,6 @@
 package entity
 
 type UserInfo struct {
-	Name string
+	Name     string
 	Password string
 }

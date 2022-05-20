@@ -5,10 +5,10 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"math/big"
 	"net/http"
 
 	"github.com/kunihiro-dev/auth-web-app/model/entity"
+	"github.com/kunihiro-dev/auth-web-app/session"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -35,17 +35,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("password is %s\n", password)
 	fmt.Printf("hashed password is %s\n", hpass)
 
-	u := entity.UserInfo { Name: name, Password: password }
+	u := entity.UserInfo{Name: name, Password: password}
 
-	n, err  := generateSessionID()
+	n, err := session.Generate()
 	if err != nil {
 		Error(w, r)
 		return
 	}
-	SessionID[u.Name] = n
-	fmt.Printf("Session ID is %d\n", n)
 
-	Top(w, r)
+	cookie := http.Cookie {Name: SESSION_KEY, Value: n, HttpOnly: true}
+	http.SetCookie(w, &cookie)
+	session.Add(u.Name, n)
+	fmt.Printf("Session ID is %s\n", n)
+
+	http.Redirect(w, r, "/top", http.StatusTemporaryRedirect)
 }
 
 func generatePassword(password string, saltLen int) ([32]byte, error) {
@@ -59,12 +62,4 @@ func generatePassword(password string, saltLen int) ([32]byte, error) {
 	passbytes := append(salt, []byte(password)...)
 	result = sha256.Sum256(passbytes)
 	return result, nil
-}
-
-func generateSessionID() (int64, error) {
-	n, err  := rand.Int(rand.Reader, big.NewInt(100))
-	if err != nil {
-		return 0, err
-	}
-	return n.Int64(), nil
 }
