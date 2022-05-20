@@ -9,7 +9,7 @@ import (
 func Top(w http.ResponseWriter, r *http.Request) {
 	name := r.PostFormValue("name")
 
-	if _, err := session.GetSession(name); err != nil {
+	if _, err := session.Take(name); err != nil {
 		Error(w, r)
 		return
 	}
