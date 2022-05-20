@@ -7,6 +7,7 @@ import (
 )
 
 var Templates *template.Template
+const SESSION_KEY = "authappkey"
 
 func LoadTemplate() error {
 	t, err := template.ParseGlob("tmpl/*.tmpl")

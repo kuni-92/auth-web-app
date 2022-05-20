@@ -42,10 +42,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Error(w, r)
 		return
 	}
-	session.Add(u.Name, n)
-	fmt.Printf("Session ID is %d\n", n)
 
-	Top(w, r)
+	cookie := http.Cookie {Name: SESSION_KEY, Value: n, HttpOnly: true}
+	http.SetCookie(w, &cookie)
+	session.Add(u.Name, n)
+	fmt.Printf("Session ID is %s\n", n)
+
+	http.Redirect(w, r, "/top", http.StatusTemporaryRedirect)
 }
 
 func generatePassword(password string, saltLen int) ([32]byte, error) {
