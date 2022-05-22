@@ -2,9 +2,10 @@ package session
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
-	"math/big"
+	"io"
 )
 
 var session map[string]string
@@ -34,12 +35,10 @@ func Take(key string) (string, error) {
 
 
 func Generate() (string, error) {
-	n, err := rand.Int(rand.Reader, big.NewInt(100))
+	s := make([]byte, 128)
+	_, err := io.ReadFull(rand.Reader, s)
 	if err != nil {
 		return "", err
 	}
-
-	s := fmt.Sprint(n)
-
-	return s, nil
+	return base64.URLEncoding.EncodeToString(s), nil
 }
