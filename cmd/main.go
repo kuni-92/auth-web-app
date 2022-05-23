@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/kunihiro-dev/auth-web-app/api"
-	"github.com/kunihiro-dev/auth-web-app/middleware"
+	mid "github.com/kunihiro-dev/auth-web-app/middleware"
 )
 
 func main() {
@@ -19,9 +19,9 @@ func main() {
 	topmenuHandler := http.HandlerFunc(api.Top)
 
 	m := http.NewServeMux()
-	m.Handle("/", middleware.Logger(indexHandler))
-	m.Handle("/login", middleware.Logger(loginHandler))
-	m.Handle("/top", middleware.Logger(topmenuHandler))
+	m.Handle("/", mid.Logger(indexHandler))
+	m.Handle("/login", mid.Logger(loginHandler))
+	m.Handle("/top", mid.Logger(mid.Auth(topmenuHandler)))
 
 	if err := http.ListenAndServe(":3030", m); err != nil {
 		log.Println("http server error.")
