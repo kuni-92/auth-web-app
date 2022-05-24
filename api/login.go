@@ -25,15 +25,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h, err := generatePassword(password, 32)
+	_, err := generatePassword(password, 32)
 	if err != nil {
 		fmt.Println("Password generate error.")
 		Error(w, r)
 		return
 	}
-	hpass := fmt.Sprintf("%x", h)
-	fmt.Printf("password is %s\n", password)
-	fmt.Printf("hashed password is %s\n", hpass)
 
 	u := entity.UserInfo{Name: name, Password: password}
 
@@ -46,7 +43,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	cookie := http.Cookie {Name: SESSION_KEY, Value: n, HttpOnly: true}
 	http.SetCookie(w, &cookie)
 	session.Add(u.Name, n)
-	fmt.Printf("Session ID is %s\n", n)
 
 	http.Redirect(w, r, "/top", http.StatusTemporaryRedirect)
 }
