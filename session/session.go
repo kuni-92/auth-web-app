@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"io"
 )
 
@@ -20,12 +19,10 @@ func Add(key string, value string) error {
 		return errors.New("Session data is exists.")
 	}
 	session[key] = value
-	fmt.Printf("add session \n %v\n", session)
 	return nil
 }
 
 func Take(key string) (string, error) {
-	fmt.Printf("key is %s take session \n %v\n", key, session)
 	// return an error, if session data not exists
 	if v, ok := session[key]; ok {
 		return v, nil
